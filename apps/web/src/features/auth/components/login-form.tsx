@@ -9,7 +9,11 @@ import {
     type LoginFormData,
 } from "../validation/login.schema";
 
+import { useLogin } from "../hooks/use-login";
+
 export const LoginForm = () => {
+    const loginMutation = useLogin();
+
     const {
         register,
         handleSubmit,
@@ -19,7 +23,7 @@ export const LoginForm = () => {
     });
 
     const onSubmit = (data: LoginFormData) => {
-        console.log('onSubmit:', data);
+        loginMutation.mutate(data);
     };
 
     return (
@@ -52,8 +56,13 @@ export const LoginForm = () => {
                 )}
             </div>
 
-            <button type="submit">
-                Login
+            <button
+                type="submit"
+                disabled={loginMutation.isPending}
+            >
+                {loginMutation.isPending
+                    ? "Logging in..."
+                    : "Login"}
             </button>
         </form>
     );
