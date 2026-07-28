@@ -1,7 +1,18 @@
 import { apiClient } from "@/lib/axios";
-import type { LoginFormData } from "../validation/login.schema";
 
-export async function login(data: LoginFormData) {
-    const response = await apiClient.post("/auth/login", data);
+import type {
+    LoginRequest,
+    LoginResponse,
+} from "../types/auth.types";
+
+export async function login(
+    data: LoginRequest,
+): Promise<LoginResponse> {
+    const response =
+        await apiClient.post<LoginResponse>(
+            "/auth/login",
+            data,
+        );
+
     return response.data;
 }

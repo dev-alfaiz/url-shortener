@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -9,9 +9,10 @@ import {
     type LoginFormData,
 } from "../validation/login.schema";
 
-import { useLogin } from "../hooks/use-login";
+import { useLogin } from "../hooks";
 
 export const LoginForm = () => {
+    const router = useRouter();
     const loginMutation = useLogin();
 
     const {
@@ -22,8 +23,9 @@ export const LoginForm = () => {
         resolver: zodResolver(loginSchema),
     });
 
-    const onSubmit = (data: LoginFormData) => {
-        loginMutation.mutate(data);
+    const onSubmit = async (data: LoginFormData) => {
+        await loginMutation.mutateAsync(data);
+        router.push("/dashboard");
     };
 
     return (

@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { queryKeys } from "@/constants/query-keys";
+
 import { getCurrentUser } from "../api/me.api";
 
 export function useCurrentUser() {
     return useQuery({
-        queryKey: ["current-user"],
+        queryKey: queryKeys.currentUser,
         queryFn: getCurrentUser,
     });
 }
