@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { UrlsModule } from './modules/urls/urls.module';
@@ -8,6 +8,7 @@ import configuration from './config/configuration';
 import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
 import configValidationSchema from './config/validation';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -19,6 +20,25 @@ import configValidationSchema from './config/validation';
         databaseConfig,
         jwtConfig,
       ],
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        const isDevelopment = configService.get('app.nodeEnv') === 'development';
+
+        return {
+          type: 'postgres',
+          host: configService.get('database.host'),
+          port: configService.get('database.port'),
+          username: configService.get('database.username'),
+          password: configService.get('database.password'),
+          database: configService.get('database.database'),
+          autoLoadEntities: true,
+          synchronize: isDevelopment,
+          logging: isDevelopment,
+        };
+      },
     }),
     AuthModule,
     UsersModule,
