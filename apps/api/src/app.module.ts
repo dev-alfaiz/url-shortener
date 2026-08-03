@@ -7,11 +7,13 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
 import configuration from './config/configuration';
 import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
+import configValidationSchema from './config/validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validationSchema: configValidationSchema,
       load: [
         configuration,
         databaseConfig,
