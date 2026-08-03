@@ -4,12 +4,19 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { UrlsModule } from './modules/urls/urls.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
+import configuration from './config/configuration';
+import databaseConfig from './config/database.config';
+import jwtConfig from './config/jwt.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      load: [
+        configuration,
+        databaseConfig,
+        jwtConfig,
+      ],
     }),
     AuthModule,
     UsersModule,
