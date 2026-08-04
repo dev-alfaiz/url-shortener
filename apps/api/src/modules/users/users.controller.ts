@@ -19,4 +19,12 @@ export class UsersController {
   createUser(@Body() user: CreateUserDto): Promise<User> {
     return this.usersService.createUser(user);
   }
+
+  @Post("register")
+  register(
+    @Body()
+    dto: CreateUserDto,
+  ) {
+    return this.usersService.register(dto);
+  }
 }
